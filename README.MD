@@ -127,37 +127,11 @@ A API estará disponível em:
 4. Após aprovação:
 
    ```bash
-   git checkout main
-   git pull origin main
+   git checkout master
+   git pull origin master
    git merge feature/nome-da-feature
-   git push origin main
+   git push origin master
    ```
-
----
-
-## 🧪 Testes
-
-> (Opcional) Caso futuramente adicione testes unitários:
-
-```bash
-npm run test
-```
-
----
-
-## ☁️ Deploy
-
-Para ambientes em nuvem, você pode:
-
-* Fazer deploy via **Firebase Functions**
-* Ou em uma **instância Node.js (Render, Railway, EC2, etc.)**
-
-Exemplo de build para deploy simples:
-
-```bash
-npm run build
-npm start
-```
 
 ---
 
