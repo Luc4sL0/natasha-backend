@@ -61,40 +61,6 @@ A API estará disponível em:
 
 ---
 
-## 🧠 Estrutura das Rotas
-
-| Método     | Rota                              | Descrição                                                                   |
-| ---------- | --------------------------------- | --------------------------------------------------------------------------- |
-| **GET**    | `/api/v1/arts`                    | Retorna todas as artes                                                      |
-| **POST**   | `/api/v1/arts`                    | Cria uma nova arte                                                          |
-| **GET**    | `/api/v1/arts/:id`                | Retorna uma arte específica                                                 |
-| **DELETE** | `/api/v1/arts/:id`                | Exclui uma arte                                                             |
-| **PUT**    | `/api/v1/arts/:id`                | Atualiza uma arte existente                                                 |
-| **GET**    | `/api/v1/arts/category/:category` | Retorna todas as artes de uma categoria específica (ex: pintura, escultura) |
-| **GET**    | `/api/v1/arts/featured`           | Retorna apenas as artes destacadas no portfólio                             |
-| **GET**    | `/api/v1/arts/recent`             | Retorna as artes mais recentes (ordenadas por data de criação)              |
-| **GET**    | `/api/v1/arts/search?q=termo`     | Busca por artes a partir de um termo (nome, técnica, descrição)             |
-| **GET**    | `/api/v1/arts/random`             | Retorna uma arte aleatória (para destaque dinâmico no site)                 |
-| **PATCH**  | `/api/v1/arts/:id/like`           | Incrementa o contador de curtidas de uma arte (interação do público)        |
-
-| Método     | Rota                                   | Descrição                                                                         |
-| ---------- | -------------------------------------- | --------------------------------------------------------------------------------- |
-| **GET**    | `/api/v1/events`                       | Lista todos os eventos                                                            |
-| **POST**   | `/api/v1/events`                       | Cria um novo evento                                                               |
-| **GET**    | `/api/v1/events/:id`                   | Retorna detalhes de um evento específico                                          |
-| **PUT**    | `/api/v1/events/:id`                   | Atualiza um evento existente                                                      |
-| **DELETE** | `/api/v1/events/:id`                   | Remove um evento                                                                  |
-| **GET**    | `/api/v1/events/upcoming`              | Retorna os próximos eventos futuros (por data > hoje)                             |
-| **GET**    | `/api/v1/events/past`                  | Retorna os eventos passados (data < hoje)                                         |
-| **GET**    | `/api/v1/events/next`                  | Retorna o evento mais próximo (o mais próximo no tempo)                           |
-| **GET**    | `/api/v1/events/latest`                | Retorna o último evento ocorrido                                                  |
-| **GET**    | `/api/v1/events/location/:city`        | Lista eventos por cidade/localidade                                               |
-| **GET**    | `/api/v1/events/highlighted`           | Retorna eventos marcados como destaque                                            |
-| **GET**    | `/api/v1/events/participation/:status` | Filtra eventos por status da artista (`upcoming`, `past`, `invited`, `confirmed`) |
-| **GET**    | `/api/v1/events/search?q=termo`        | Busca por eventos a partir do nome, local ou descrição                            |
-
----
-
 ## 🧩 Boas Práticas
 
 ### ✅ Estilo de Código
