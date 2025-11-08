@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import formData from "express-form-data";
 import eventRoutes from "./src/routes/eventRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
 
 const corsOptions = {
   origin: '*',  
@@ -16,6 +17,8 @@ app.use(cors(corsOptions));
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/v1", eventRoutes);
+app.use("/api/v1/auth", authRoutes);
+
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -37,6 +40,10 @@ app.get("/", (req, res) => {
         "POST /api/v1/event",
         "PUT /api/v1/event/:id",
         "DELETE /api/v1/event/:id",
+        "POST /api/v1/auth/create",
+        "POST /api/v1/auth/logout",
+        "POST /api/v1/auth/change-password",
+        "GET /api/v1/auth/user/:id",
       ],
     },
   });
