@@ -1,7 +1,7 @@
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { createDocument, deleteDocument, getAllDocuments, getDocument, putDocument } from "../services/firestoreService.js";
 
-const EVENTS_COLLECTION = "events";
+export const EVENTS_COLLECTION = "events";
 
 export class EventModel {
   constructor({
@@ -59,7 +59,6 @@ export class EventModel {
   // Cria uma instância da classe a partir de um objeto comum
   static fromObject(obj = {}) {
     if (!obj) return null;
-    console.log(obj);
     return new EventModel({
       id: obj.id || obj._id || null,
       title: obj.title || null,

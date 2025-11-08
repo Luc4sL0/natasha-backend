@@ -16,6 +16,7 @@ import {
 } from "../controllers/eventController.js";
 
 import { upload } from "../config/multerConfig.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
@@ -52,10 +53,11 @@ router.get("/events/status/:status", getStatusEventsController);
 router.get("/events/location/:city", getLocationEventsController);
 router.get("/event/:id", getEventController);
 
-// Rotas protegidas (escrita) – qualquer autenticado é admin
+// Rotas protegidas (escrita) – autenticado e admin
 
 router.post(
   "/event",
+  verifyAdmin,
   upload.fields([
     { name: "coverImg", maxCount: 1 },
     { name: "otherImages", maxCount: 5 },
@@ -65,6 +67,7 @@ router.post(
 
 router.put(
   "/event/:id",
+  verifyAdmin,
   upload.fields([
     { name: "coverImg", maxCount: 1 },
     { name: "otherImages", maxCount: 5 },
@@ -72,6 +75,6 @@ router.put(
   putEventController
 );
 
-router.delete("/event/:id", deleteEventController);
+router.delete("/event/:id", verifyAdmin, deleteEventController);
 
 export default router;
