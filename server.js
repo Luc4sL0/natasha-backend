@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import formData from "express-form-data";
 import eventRoutes from "./src/routes/eventRoutes.js";
+import artRoutes from "./src/routes/artRoutes.js"
 import authRoutes from "./src/routes/authRoutes.js";
 
 const corsOptions = {
@@ -17,6 +18,7 @@ app.use(cors(corsOptions));
 app.use("/uploads", express.static("uploads"));
 
 app.use("/api/v1", eventRoutes);
+app.use("/api/v1", artRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 
