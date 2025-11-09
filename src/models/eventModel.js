@@ -15,7 +15,7 @@ export class EventModel {
     otherImages,
     highlighted,
     status,
-    artist_id,
+    artist_names,
     tags,
     createdAt,
     updatedAt,
@@ -30,7 +30,7 @@ export class EventModel {
     this.otherImages = otherImages || [];
     this.highlighted = highlighted || false;
     this.status = status || "draft";
-    this.artist_id = artist_id || null;
+    this.artist_names = artist_names || [];
     this.tags = tags || [];
     this.createdAt = getDateFromFirestore(createdAt);
     this.updatedAt = getDateFromFirestore(updatedAt); 
@@ -70,7 +70,7 @@ export class EventModel {
       otherImages: obj.otherImages || [],
       highlighted: obj.highlighted || false,
       status: obj.status || "draft",
-      artist_id: obj.artist_id || null,
+      artist_names: obj.artist_names || [],
       tags: obj.tags || [],
       createdAt: getDateFromFirestore(obj.createdAt),
       updatedAt: getDateFromFirestore(obj.updatedAt)
@@ -90,7 +90,7 @@ export class EventModel {
       otherImages: this.otherImages,
       highlighted: this.highlighted,
       status: this.status,
-      artist_id: this.artist_id,
+      artist_names: this.artist_names,
       tags: this.tags,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
