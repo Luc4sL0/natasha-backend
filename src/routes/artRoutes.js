@@ -16,17 +16,23 @@ import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
-router.post("/arts",upload.fields([
+router.post(
+  "/arts",
+  verifyAdmin,
+  upload.fields([
     {name: "mainImgUrl", maxCount: 1}, 
     {name: "othersImages", maxCount: 5 }]),
-    postArtController
+  postArtController
 );
-router.put("/arts/:id/", upload.fields([
+router.put(
+  "/arts/:id/",
+  verifyAdmin, 
+  upload.fields([
     {name: "mainImgUrl", maxCount: 1}, 
     {name: "othersImages", maxCount: 5 }]),
-    putArtController
+  putArtController
 );
-router.delete("/arts/:id", deleteArtController);
+router.delete("/arts/:id", verifyAdmin, deleteArtController);
 
 router.get("/arts", getArtsController);
 router.get("/arts/category/:category", getArtByCategoryController);

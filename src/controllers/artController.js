@@ -2,7 +2,6 @@ import { ArtModel } from "../models/artModel.js";
 import fs from "fs";
 import path from 'path';
 import { randomInt } from 'crypto';
-import { json } from "stream/consumers";
 
 export const postArtController = async (req, res) => {
   try{    
