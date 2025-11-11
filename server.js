@@ -7,8 +7,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import socialRoutes from "./src/routes/socialRoutes.js";
 import formRoutes from "./src/routes/formRoutes.js";
 import aboutSectionRoutes from "./src/routes/aboutSectionRoutes.js";
-
-
+import serverless from "serverless-http";
 
 const corsOptions = {
   origin: '*',  
