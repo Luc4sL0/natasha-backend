@@ -4,6 +4,11 @@ import formData from "express-form-data";
 import eventRoutes from "./src/routes/eventRoutes.js";
 import artRoutes from "./src/routes/artRoutes.js"
 import authRoutes from "./src/routes/authRoutes.js";
+import socialRoutes from "./src/routes/socialRoutes.js";
+import formRoutes from "./src/routes/formRoutes.js";
+import aboutSectionRoutes from "./src/routes/aboutSectionRoutes.js";
+
+
 
 const corsOptions = {
   origin: '*',  
@@ -19,6 +24,10 @@ app.use("/uploads", express.static("uploads"));
 
 app.use("/api/v1", eventRoutes);
 app.use("/api/v1", artRoutes);
+app.use("/api/v1", socialRoutes);
+app.use("/api/v1", formRoutes);
+app.use("/api/v1", aboutSectionRoutes);
+
 app.use("/api/v1/auth", authRoutes);
 
 
@@ -52,5 +61,5 @@ app.get("/", (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

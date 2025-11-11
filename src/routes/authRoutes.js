@@ -6,16 +6,6 @@ import multer from "multer";
 
 const router = express.Router();
 const upload = multer();
-/**
- * Prefixo aplicado no app principal:
- * app.use("/api/v1/auth", router);
- *
- * Exemplos finais:
- * POST  /api/v1/auth/create
- * POST  /api/v1/auth/logout
- * POST  /api/v1/auth/change-password
- * GET  /api/v1/auth/user/:id
- */
 
 router.post("/create", upload.none(), verifyAdmin, createUserController);
 router.post("/logout/:id", logoutController);

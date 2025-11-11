@@ -15,7 +15,7 @@ export const getEventsController = async (req, res) => {
 export const getEventController = async (req, res) => {
   try{
     if(!req.params.id) {
-      throw new Error("Faltaram parâmetros na requisição.")
+      throw new Error("Faltaram parâmetros na requisição.");
     }
 
     const event = await EventModel.findById(req.params.id);

@@ -26,6 +26,7 @@ export const getDocument = async (collection, id) => {
   return { id: doc.id, ...data };
 }
 
+
 export const getDocumentsByCategory = async (collection, category) =>{
   const q = db.collection(collection).where("category", "==", category);
   const queryResult = await q.get();
@@ -34,6 +35,7 @@ export const getDocumentsByCategory = async (collection, category) =>{
   return data;
 }
 
+
 export const getFeaturedDocuments = async (collection) =>{
   const q = db.collection(collection).where("featured", "==", true);
   const queryResult = await q.get();
@@ -41,6 +43,7 @@ export const getFeaturedDocuments = async (collection) =>{
   const data = queryResult.docs.map((doc) => ({id: doc.id, ...doc.data()}));
   return data;
 }
+
 
 /**
  * @brief Cria um documento dentro de uma coleção.
