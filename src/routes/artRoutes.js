@@ -24,6 +24,7 @@ router.post(
     {name: "othersImages", maxCount: 5 }]),
   postArtController
 );
+
 router.put(
   "/arts/:id/",
   verifyAdmin, 
@@ -32,6 +33,7 @@ router.put(
     {name: "othersImages", maxCount: 5 }]),
   putArtController
 );
+
 router.delete("/arts/:id", verifyAdmin, deleteArtController);
 
 router.get("/arts", getArtsController);

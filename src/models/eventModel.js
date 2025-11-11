@@ -1,7 +1,6 @@
+import { FIRESTORE_CONSTANTS } from "../constants/generalConsts.js";
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { createDocument, deleteDocument, getAllDocuments, getDocument, putDocument } from "../services/firestoreService.js";
-
-export const EVENTS_COLLECTION = "events";
 
 export class EventModel {
   constructor({
@@ -105,7 +104,7 @@ export class EventModel {
 
     const dataToSave = { ...this.toJSON() };
     delete dataToSave.id;
-    this.id = await createDocument(EVENTS_COLLECTION, dataToSave);
+    this.id = await createDocument(FIRESTORE_CONSTANTS.EVENTS_COLLECTION, dataToSave);
 
     return this;
   }
@@ -121,7 +120,7 @@ export class EventModel {
     const dataToUpdate = { ...this.toJSON() };
     delete dataToUpdate.id;
     
-    await putDocument(EVENTS_COLLECTION, this.id, dataToUpdate);
+    await putDocument(FIRESTORE_CONSTANTS.EVENTS_COLLECTION, this.id, dataToUpdate);
     
     return this;
   }
@@ -129,18 +128,18 @@ export class EventModel {
   // Deleta o objeto em uma coleção no banco de dados.
   async delete() {
     if (!this.id) throw new Error("Evento não possui ID para ser excluído");
-    await deleteDocument(EVENTS_COLLECTION, this.id);
+    await deleteDocument(FIRESTORE_CONSTANTS.EVENTS_COLLECTION, this.id);
   }
 
   // Busca o objeto no banco de dados.
   static async findById(id) {
-    const data = await getDocument(EVENTS_COLLECTION, id);
+    const data = await getDocument(FIRESTORE_CONSTANTS.EVENTS_COLLECTION, id);
     return data ? EventModel.fromObject(data) : null;
   }
 
   // Busca uma lista de objetos em uma coleção no banco de dados.
   static async findAll() {
-    const list = await getAllDocuments(EVENTS_COLLECTION);
+    const list = await getAllDocuments(FIRESTORE_CONSTANTS.EVENTS_COLLECTION);
     return list.map((doc) => EventModel.fromObject(doc));
   }
 }

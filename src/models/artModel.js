@@ -1,7 +1,7 @@
+import { FIRESTORE_CONSTANTS } from "../constants/generalConsts.js";
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { createDocument, deleteDocument, getAllDocuments, getDocument, getDocumentsByCategory, putDocument, getFeaturedDocuments } from "../services/firestoreService.js";
 
-const ARTS_COLLECTION = "arts";
 export class ArtModel {
     constructor({
         id,
@@ -9,7 +9,7 @@ export class ArtModel {
         description,
         category,
         materials,
-        artDate,
+        artYear,
         mainImgUrl,
         othersImages,
         featured,
@@ -19,15 +19,14 @@ export class ArtModel {
         tags,
         createdAt,
         updatedAt,
-        likes,
-        artist_id
+        artist_name
     }){
     this.id = id;
     this.title = title;
     this.description = description;
     this.category = category;
     this.materials = materials;
-    this.artDate = artDate;
+    this.artYear = artYear;
     this.mainImgUrl = mainImgUrl;
     this.othersImages = othersImages || []; 
     this.featured = featured;
@@ -37,21 +36,15 @@ export class ArtModel {
     this.tags = tags || []; 
     this.createdAt = getDateFromFirestore(createdAt); 
     this.updatedAt = getDateFromFirestore(updatedAt); 
-    this.likes = likes ?? 0; 
-    this.artist_id = artist_id;
-
+    this.artist_name = artist_name;
     }   
 
     #validate(){
         const errors = [];
         if(!this.title) errors.push("O campo 'title' é obrigatório.");
         if(!this.description) errors.push("O campo 'description' é obrigatório");
-        if(!this.category) errors.push("O campo 'category' é obrigatório.");
-        if(!this.materials) errors.push("O campo 'materials' é obrigatório.");
-        if(!this.artDate) errors.push("O campo 'artDate' é obrigatório.");
+        if(!this.artYear) errors.push("O campo 'artYear' é obrigatório.");
         if(!this.mainImgUrl) errors.push("O campo 'mainImgUrl' é obrigatório.");
-        if(this.available ==  null) errors.push("O campo 'available' é obrigatório.");
-        if(!this.price) errors.push("O campo 'price' é obrigatório.");
 
         if (errors.length > 0){
             throw new Error(errors.join(" "));
@@ -65,8 +58,8 @@ export class ArtModel {
             title: obj.title || null,
             description: obj.description || null,
             category: obj.category || null,
-            materials: obj.materials || null, 
-            artDate: obj.artDate || null,
+            materials: obj.materials || [], 
+            artYear: obj.artYear || null,
             mainImgUrl: obj.mainImgUrl || null,
             othersImages: obj.othersImages || [],
             featured: obj.featured ?? false, 
@@ -76,8 +69,7 @@ export class ArtModel {
             tags: obj.tags || [],
             createdAt: getDateFromFirestore(obj.createdAt),
             updatedAt: getDateFromFirestore(obj.updatedAt),
-            likes: obj.likes ?? 0,
-            artist_id: obj.artist_id || null
+            artist_name: obj.artist_name || null
         });
     }
 
@@ -88,7 +80,7 @@ export class ArtModel {
             description: this.description,
             category: this.category,
             materials: this.materials, 
-            artDate: this.artDate,
+            artYear: this.artYear,
             mainImgUrl: this.mainImgUrl,
             othersImages: this.othersImages,
             featured: this.featured, 
@@ -98,8 +90,7 @@ export class ArtModel {
             tags: this.tags,
             createdAt: this.createdAt,
             updatedAt: this.updatedAt,
-            likes: this.likes,
-            artist_id: this.artist_id
+            artist_name: this.artist_name
         };
   }
 
@@ -110,7 +101,7 @@ export class ArtModel {
 
     const dataToSave = this.toJSON();
     delete dataToSave.id;
-    this.id = await createDocument(ARTS_COLLECTION, dataToSave);
+    this.id = await createDocument(FIRESTORE_CONSTANTS.ARTS_COLLECTION, dataToSave);
     return this;
   }
 
@@ -122,37 +113,35 @@ export class ArtModel {
     const dataToUpdate = this.toJSON();;
     delete dataToUpdate.id;
 
-    await putDocument(ARTS_COLLECTION, this.id, dataToUpdate);
+    await putDocument(FIRESTORE_CONSTANTS.ARTS_COLLECTION, this.id, dataToUpdate);
 
     return this;
   }
 
   async delete() {
     if (!this.id) throw new Error("Arte não possui ID para ser excluída");
-    await deleteDocument(ARTS_COLLECTION, this.id);
+    await deleteDocument(FIRESTORE_CONSTANTS.ARTS_COLLECTION, this.id);
   }
   
   static async findById(id) {
-    const data = await getDocument(ARTS_COLLECTION, id);
+    const data = await getDocument(FIRESTORE_CONSTANTS.ARTS_COLLECTION, id);
     return data ? ArtModel.fromObject(data) : null;
   }
 
   static async findAll() {
-    const list = await getAllDocuments(ARTS_COLLECTION);
+    const list = await getAllDocuments(FIRESTORE_CONSTANTS.ARTS_COLLECTION);
     return list.map((doc) => ArtModel.fromObject(doc));
   }
 
   static async findByCategory(category){
-    const list = await getDocumentsByCategory(ARTS_COLLECTION,category);
+    const list = await getDocumentsByCategory(FIRESTORE_CONSTANTS.ARTS_COLLECTION, category);
     return list.map((doc) => ArtModel.fromObject(doc));
   }
 
   static async getFeaturedArts(){
-    const list = await getFeaturedDocuments(ARTS_COLLECTION);
+    const list = await getFeaturedDocuments(FIRESTORE_CONSTANTS.ARTS_COLLECTION);
 
     return list.map((doc) => ArtModel.fromObject(doc));
   }
-
-
   
 }
