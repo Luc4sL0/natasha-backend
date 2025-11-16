@@ -11,6 +11,7 @@ router.get("/sections/about/:id", getAboutSectionController);
 
 router.put(
   "/sections/about/:id",
+  verifyAdmin,
   upload.fields([
     { name: "coverImg", maxCount: 1 },
   ]),

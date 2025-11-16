@@ -1,6 +1,9 @@
+import { API_DOMAIN } from "../config/config.js";
 import { FIRESTORE_CONSTANTS } from "../constants/generalConsts.js";
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { getDocument, putDocument } from "../services/firestoreService.js";
+import fs from "fs";
+import path from 'path';
 
 export class AboutSectionModel{
     constructor({id, imgUrl, text, updatedAt}){
@@ -37,6 +40,13 @@ export class AboutSectionModel{
         };
     }
 
+    // Prepara o objeto para a resposta da API.
+    toAnswer(){
+        let answer = this.toJSON();
+        answer.imgUrl = API_DOMAIN + answer.imgUrl;
+        return answer;
+    }
+
     // Atualiza o objeto em uma coleção no banco de dados.
     async update(fields = {}) {
         
@@ -60,5 +70,17 @@ export class AboutSectionModel{
     static async findDocument(id) {
         const doc = await getDocument(FIRESTORE_CONSTANTS.ABOUT_SECTION_COLLECTION, id);
         return AboutSectionModel.fromObject(doc);
+    }
+
+    deleteImg(){
+        if(!this.imgUrl) return;
+        const img = this.imgUrl;
+        const nameImg = path.basename(img);
+        const pathImg = path.join('uploads', nameImg);
+        fs.unlink(pathImg, (error) => {
+            if(error){
+                throw new Error("Erro ao deletar imagem principal do evento.");
+            }
+        });
     }
 }

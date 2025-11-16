@@ -1,6 +1,9 @@
+import { API_DOMAIN } from "../config/config.js";
 import { FIRESTORE_CONSTANTS } from "../constants/generalConsts.js";
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { createDocument, deleteDocument, getAllDocuments, getDocument, getDocumentsByCategory, putDocument, getFeaturedDocuments } from "../services/firestoreService.js";
+import fs from "fs";
+import path from 'path';
 
 export class ArtModel {
     constructor({
@@ -8,7 +11,6 @@ export class ArtModel {
         title,
         description,
         category,
-        materials,
         artYear,
         mainImgUrl,
         othersImages,
@@ -25,7 +27,6 @@ export class ArtModel {
     this.title = title;
     this.description = description;
     this.category = category;
-    this.materials = materials;
     this.artYear = artYear;
     this.mainImgUrl = mainImgUrl;
     this.othersImages = othersImages || []; 
@@ -40,58 +41,64 @@ export class ArtModel {
     }   
 
     #validate(){
-        const errors = [];
-        if(!this.title) errors.push("O campo 'title' é obrigatório.");
-        if(!this.description) errors.push("O campo 'description' é obrigatório");
-        if(!this.artYear) errors.push("O campo 'artYear' é obrigatório.");
-        if(!this.mainImgUrl) errors.push("O campo 'mainImgUrl' é obrigatório.");
+      const errors = [];
+      if(!this.title) errors.push("O campo 'title' é obrigatório.");
+      if(!this.description) errors.push("O campo 'description' é obrigatório");
+      if(!this.artYear) errors.push("O campo 'artYear' é obrigatório.");
+      if(!this.mainImgUrl) errors.push("O campo 'mainImgUrl' é obrigatório.");
 
-        if (errors.length > 0){
-            throw new Error(errors.join(" "));
-        }
+      if (errors.length > 0){
+          throw new Error(errors.join(" "));
+      }
     }
 
     static fromObject(obj = {}){
-        if(!obj) return null;
-        return new ArtModel({
-            id: obj.id || obj._id || null,
-            title: obj.title || null,
-            description: obj.description || null,
-            category: obj.category || null,
-            materials: obj.materials || [], 
-            artYear: obj.artYear || null,
-            mainImgUrl: obj.mainImgUrl || null,
-            othersImages: obj.othersImages || [],
-            featured: obj.featured ?? false, 
-            available: obj.available ?? false,
-            price: obj.price || null,
-            location: obj.location || null,
-            tags: obj.tags || [],
-            createdAt: getDateFromFirestore(obj.createdAt),
-            updatedAt: getDateFromFirestore(obj.updatedAt),
-            artist_name: obj.artist_name || null
-        });
+      if(!obj) return null;
+      return new ArtModel({
+        id: obj.id || obj._id || null,
+        title: obj.title || null,
+        description: obj.description || null,
+        category: obj.category || null,
+        artYear: obj.artYear || null,
+        mainImgUrl: obj.mainImgUrl || null,
+        othersImages: obj.othersImages || [],
+        featured: obj.featured ?? false, 
+        available: obj.available ?? false,
+        price: obj.price || null,
+        location: obj.location || null,
+        tags: obj.tags || [],
+        createdAt: getDateFromFirestore(obj.createdAt),
+        updatedAt: getDateFromFirestore(obj.updatedAt),
+        artist_name: obj.artist_name || null
+      });
     }
 
     toJSON() {
         return {
-            id: this.id,
-            title: this.title,
-            description: this.description,
-            category: this.category,
-            materials: this.materials, 
-            artYear: this.artYear,
-            mainImgUrl: this.mainImgUrl,
-            othersImages: this.othersImages,
-            featured: this.featured, 
-            available: this.available,
-            price: this.price,
-            location: this.location,
-            tags: this.tags,
-            createdAt: this.createdAt,
-            updatedAt: this.updatedAt,
-            artist_name: this.artist_name
-        };
+          id: this.id,
+          title: this.title,
+          description: this.description,
+          category: this.category,
+          artYear: this.artYear,
+          mainImgUrl: this.mainImgUrl,
+          othersImages: this.othersImages,
+          featured: this.featured, 
+          available: this.available,
+          price: this.price,
+          location: this.location,
+          tags: this.tags,
+          createdAt: this.createdAt,
+          updatedAt: this.updatedAt,
+          artist_name: this.artist_name
+      };
+  }
+
+  // Prepara o objeto para a resposta da API.
+  toAnswer(){
+    let answer = this.toJSON();
+    if(answer.mainImgUrl) answer.mainImgUrl = API_DOMAIN + answer.mainImgUrl;
+    answer.othersImages = answer.othersImages.map(url => API_DOMAIN + url);
+    return answer;
   }
 
   async create(){
@@ -121,6 +128,7 @@ export class ArtModel {
   async delete() {
     if (!this.id) throw new Error("Arte não possui ID para ser excluída");
     await deleteDocument(FIRESTORE_CONSTANTS.ARTS_COLLECTION, this.id);
+    this.deleteAllImages();
   }
   
   static async findById(id) {
@@ -142,6 +150,37 @@ export class ArtModel {
     const list = await getFeaturedDocuments(FIRESTORE_CONSTANTS.ARTS_COLLECTION);
 
     return list.map((doc) => ArtModel.fromObject(doc));
+  }
+
+  deleteAllImages(){
+    this.deleteMainImg();
+    this.deleteOtherImgs();
+  }
+
+  deleteMainImg(){
+    if(!this.mainImgUrl) return;
+    const img = this.mainImgUrl;
+    const nameImg = path.basename(img);
+    const pathImg = path.join('uploads', nameImg);
+    fs.unlink(pathImg, (error) => {
+      if(error){
+        throw new Error("Erro ao deletar imagem principal do evento.");
+      }
+    });
+  }
+
+
+  deleteOtherImgs(){
+    if(!this.othersImages || this.othersImages.length == 0) return;
+    this.othersImages.forEach(img => {
+      const nameImg = path.basename(img);
+      const pathImg = path.join('uploads', nameImg);
+      fs.unlink(pathImg, (error) => {
+        if(error){
+          throw new Error("Erro ao deletar outras imagens do evento.");
+        }
+      })
+    })
   }
   
 }
