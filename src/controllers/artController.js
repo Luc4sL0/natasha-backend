@@ -1,6 +1,4 @@
 import { ArtModel } from "../models/artModel.js";
-import fs from "fs";
-import path from 'path';
 import { randomInt } from 'crypto';
 
 
@@ -19,9 +17,7 @@ export const postArtController = async (req, res) => {
 
     body.available = (body.available === 'true');
     body.featured = (body.featured === 'true');
-    body.likes = parseInt(body.likes);
     body.price = parseFloat(body.price);
-    body.artDate = new Date(body.artDate);
 
     const art = ArtModel.fromObject(body);
 
@@ -53,9 +49,7 @@ export const putArtController = async (req, res) =>{
     const updates = { ...req.body };
     updates.available = (req.body.available === 'true');
     updates.featured = (req.body.featured === 'true');
-    updates.likes = parseInt(req.body.likes);
     updates.price = parseFloat(req.body.price);
-    updates.artDate = new Date(req.body.artDate);
 
     if (req.files?.mainImgUrl?.[0]) {
       updates.mainImgUrl = `/uploads/${req.files.mainImgUrl[0].filename}`;
