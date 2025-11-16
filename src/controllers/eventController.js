@@ -4,7 +4,7 @@ import { EventModel } from "../models/eventModel.js"
 export const getEventsController = async (req, res) => {
   try{
     const events = await EventModel.findAll();
-    return res.status(200).json(events.map((e) => e.toJSON()));
+    return res.status(200).json(events.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter todos os eventos: ${error}`});
@@ -24,7 +24,7 @@ export const getEventController = async (req, res) => {
       return res.status(404).json({"message":`Evento com ID = ${req.params.id} não encontrado`});
     }
     
-    return res.status(200).json(event.toJSON());
+    return res.status(200).json(event.toAnswer());
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter um evento: ${error}`});
@@ -48,16 +48,18 @@ export const putEventController = async (req, res) => {
 
     if (req.files?.coverImg?.[0]) {
       updates.coverImgUrl = `/uploads/${req.files.coverImg[0].filename}`;
+      event.deleteCoverImg();
     }
 
     if (req.files?.otherImages?.length > 0) {
       updates.otherImages = req.files.otherImages.map(
         (file) => `/uploads/${file.filename}`
       );
+      event.deleteOtherImgs();
     }
 
     await event.update(updates);
-    return res.status(200).json(event.toJSON());
+    return res.status(200).json(event.toAnswer());
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao atualizar evento: ${error}`});
@@ -86,7 +88,7 @@ export const postEventController = async (req, res) => {
     }
     
     await event.create();
-    return res.status(201).json(event.toJSON());
+    return res.status(201).json(event.toAnswer());
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao criar um evento: ${error}`});
@@ -115,7 +117,7 @@ export const getCurrentEventsController = async (req, res) => {
     const now = Date.now();
     const events = await EventModel.findAll();
     const currents = events.filter((e) => e.startDate.getTime() <= now && e.endDate >= now);
-    return res.status(200).json(currents.map((e) => e.toJSON()));
+    return res.status(200).json(currents.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos atuais: ${error}`});
@@ -127,7 +129,7 @@ export const getUpcomingEventsController = async (req, res) => {
   try{
     const events = await EventModel.findAll();
     const upcomings = events.filter((e) => e.startDate.getTime() > Date.now())
-    return res.status(200).json(upcomings.map((e) => e.toJSON()));
+    return res.status(200).json(upcomings.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos futuros: ${error}`});
@@ -139,7 +141,7 @@ export const getPastEventsController = async (req, res) => {
   try{
     const events = await EventModel.findAll();
     const pasts = events.filter((e) => e.endDate.getTime() < Date.now())
-    return res.status(200).json(pasts.map((e) => e.toJSON()));
+    return res.status(200).json(pasts.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos passados: ${error}`});
@@ -158,7 +160,7 @@ export const getNextEventController = async (req, res) => {
       return res.status(404).json({ "message": "Nenhum evento futuro encontrado." });
     }
 
-    return res.status(200).json(nextEvent.toJSON());
+    return res.status(200).json(nextEvent.toAnswer());
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter próximo evento: ${error}`});
@@ -177,7 +179,7 @@ export const getLastEventController = async (req, res) => {
       return res.status(404).json({ "message": "Nenhum evento futuro encontrado." });
     }
 
-    return res.status(200).json(lastEvent.toJSON());
+    return res.status(200).json(lastEvent.toAnswer());
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter evento anterior: ${error}`});
@@ -187,13 +189,13 @@ export const getLastEventController = async (req, res) => {
 
 export const getLocationEventsController = async (req, res) => {
   try{
-    if(!req.params.city) {
+    if(!req.params.country) {
       throw new Error("Faltaram parâmetros na requisição.")
     }
 
     const events = await EventModel.findAll();
-    const locations = events.filter((e) => e.location?.city === req.params.city);
-    return res.status(200).json(locations.map((e) => e.toJSON()));
+    const locations = events.filter((e) => e.location?.country === req.params.country);
+    return res.status(200).json(locations.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos por localização: ${error}`});
@@ -205,7 +207,7 @@ export const getHighlightedEventsController = async (req, res) => {
   try{
     const events = await EventModel.findAll();
     const highlighteds = events.filter((e) => e.highlighted === true);
-    return res.status(200).json(highlighteds.map((e) => e.toJSON()));
+    return res.status(200).json(highlighteds.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos destacados: ${error}`});
@@ -221,7 +223,7 @@ export const getStatusEventsController = async (req, res) => {
 
     const events = await EventModel.findAll();
     const statuses = events.filter((e) => e.status === req.params.status);
-    return res.status(200).json(statuses.map((e) => e.toJSON()));
+    return res.status(200).json(statuses.map((e) => e.toAnswer()));
   }
   catch(error){
     return res.status(500).json({"error":`Erro ao obter eventos por status: ${error}`});

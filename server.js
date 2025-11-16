@@ -7,6 +7,8 @@ import authRoutes from "./src/routes/authRoutes.js";
 import socialRoutes from "./src/routes/socialRoutes.js";
 import formRoutes from "./src/routes/formRoutes.js";
 import aboutSectionRoutes from "./src/routes/aboutSectionRoutes.js";
+import  "./src/config/config.js";
+import { PORT } from "./src/config/config.js";
 
 const corsOptions = {
   origin: '*',  
@@ -31,32 +33,8 @@ app.use("/api/v1/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "API do sistema de eventos está online!",
-    endpoints: {
-      public: [
-        "GET /api/v1/events",
-        "GET /api/v1/event/:id",
-        "GET /api/v1/events/current",
-        "GET /api/v1/events/upcoming",
-        "GET /api/v1/events/past",
-        "GET /api/v1/event/next",
-        "GET /api/v1/event/last",
-        "GET /api/v1/events/highlighted",
-        "GET /api/v1/events/status/:status",
-        "GET /api/v1/events/location/:city",
-      ],
-      protected: [
-        "POST /api/v1/event",
-        "PUT /api/v1/event/:id",
-        "DELETE /api/v1/event/:id",
-        "POST /api/v1/auth/create",
-        "POST /api/v1/auth/logout",
-        "POST /api/v1/auth/change-password",
-        "GET /api/v1/auth/user/:id",
-      ],
-    },
+    message: "API natasha gallery's está online!",
   });
 });
 
-const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

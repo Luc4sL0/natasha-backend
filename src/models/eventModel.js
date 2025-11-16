@@ -1,6 +1,9 @@
+import { API_DOMAIN } from "../config/config.js";
 import { FIRESTORE_CONSTANTS } from "../constants/generalConsts.js";
 import { getDateFromFirestore } from "../helpers/dataFormat.js";
 import { createDocument, deleteDocument, getAllDocuments, getDocument, putDocument } from "../services/firestoreService.js";
+import fs from "fs";
+import path from 'path';
 
 export class EventModel {
   constructor({
@@ -28,7 +31,7 @@ export class EventModel {
     this.coverImgUrl = coverImgUrl || null;
     this.otherImages = otherImages || [];
     this.highlighted = highlighted || false;
-    this.status = status || "draft";
+    this.status = status || "visible";
     this.artist_names = artist_names || [];
     this.tags = tags || [];
     this.createdAt = getDateFromFirestore(createdAt);
@@ -46,7 +49,7 @@ export class EventModel {
       errors.push("A data de término não pode ser anterior à data de início.");
     }
 
-    if (!["visible", "draft", "hidden"].includes(this.status)) {
+    if (!["visible", "hidden"].includes(this.status)) {
       errors.push("O status informado é inválido.");
     }
 
@@ -96,6 +99,14 @@ export class EventModel {
     };
   }
 
+  // Prepara o objeto para a resposta da API.
+  toAnswer(){
+    let answer = this.toJSON();
+    if(answer.coverImgUrl) answer.coverImgUrl = API_DOMAIN + answer.coverImgUrl;
+    answer.otherImages = answer.otherImages.map(url => API_DOMAIN + url);
+    return answer;
+  }
+
   // Salva o objeto em uma coleção no banco de dados.
   async create(){
     this.createdAt = new Date();
@@ -129,6 +140,7 @@ export class EventModel {
   async delete() {
     if (!this.id) throw new Error("Evento não possui ID para ser excluído");
     await deleteDocument(FIRESTORE_CONSTANTS.EVENTS_COLLECTION, this.id);
+    this.deleteAllImages();
   }
 
   // Busca o objeto no banco de dados.
@@ -141,5 +153,36 @@ export class EventModel {
   static async findAll() {
     const list = await getAllDocuments(FIRESTORE_CONSTANTS.EVENTS_COLLECTION);
     return list.map((doc) => EventModel.fromObject(doc));
+  }
+
+  deleteAllImages(){
+    this.deleteCoverImg();
+    this.deleteOtherImgs();
+  }
+
+  deleteCoverImg(){
+    if(!this.coverImgUrl) return;
+    const img = this.coverImgUrl;
+    const nameImg = path.basename(img);
+    const pathImg = path.join('uploads', nameImg);
+    fs.unlink(pathImg, (error) => {
+      if(error){
+        throw new Error("Erro ao deletar imagem principal do evento.");
+      }
+    });
+  }
+
+
+  deleteOtherImgs(){
+    if(!this.otherImages || this.otherImages.length == 0) return;
+    this.otherImages.forEach(img => {
+      const nameImg = path.basename(img);
+      const pathImg = path.join('uploads', nameImg);
+      fs.unlink(pathImg, (error) => {
+        if(error){
+          throw new Error("Erro ao deletar outras imagens do evento.");
+        }
+      })
+    })
   }
 }

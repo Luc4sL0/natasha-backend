@@ -14,6 +14,7 @@ export const createUserController = async (req, res) => {
   }
 }
 
+
 export const logoutController = async (req, res) => {
   try {
     const targetId = req.params.id;

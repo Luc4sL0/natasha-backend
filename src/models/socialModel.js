@@ -50,14 +50,21 @@ export class SocialModel{
 
         const dataToUpdate = { ...this.toJSON() };
         
-        await putDocument(FIRESTORE_CONSTANTS.SETTINGS_COLLECTION, FIRESTORE_CONSTANTS.SOCIAL_DOCUMENT, dataToUpdate);
+        await putDocument(
+            FIRESTORE_CONSTANTS.SETTINGS_COLLECTION, 
+            FIRESTORE_CONSTANTS.SOCIAL_DOCUMENT, 
+            dataToUpdate
+        );
         
         return this;
     }
 
     // Busca uma lista de objetos em uma coleção no banco de dados.
     static async findDocument() {
-        const doc = await getDocument(FIRESTORE_CONSTANTS.SETTINGS_COLLECTION, FIRESTORE_CONSTANTS.SOCIAL_DOCUMENT);
+        const doc = await getDocument(
+            FIRESTORE_CONSTANTS.SETTINGS_COLLECTION, 
+            FIRESTORE_CONSTANTS.SOCIAL_DOCUMENT
+        );
         return SocialModel.fromObject(doc);
     }
 }
