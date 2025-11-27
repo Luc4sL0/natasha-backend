@@ -12,7 +12,7 @@ export class SocialModel{
         if(!this.socials) throw new Error("socials está vazio.");
         this.socials.forEach(social => {
             if(!social.link) throw new Error("Link é obrigatório.")
-            if(!["fb", "insta", "ytb"].includes(social.type))
+            if(!["facebook", "instagram", "youtube"].includes(social.type))
                 throw new Error("Tipo de link não permitido.");
         });
     }

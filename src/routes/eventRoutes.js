@@ -28,7 +28,7 @@ router.get("/event/next", getNextEventController);
 router.get("/event/last", getLastEventController);
 router.get("/events/highlighted", getHighlightedEventsController);
 router.get("/events/status/:status", getStatusEventsController);
-router.get("/events/location/:city", getLocationEventsController);
+router.get("/events/location/:country", getLocationEventsController);
 router.get("/event/:id", getEventController);
 
 router.post(

@@ -6,6 +6,7 @@ import artRoutes from "./src/routes/artRoutes.js"
 import authRoutes from "./src/routes/authRoutes.js";
 import socialRoutes from "./src/routes/socialRoutes.js";
 import formRoutes from "./src/routes/formRoutes.js";
+import emailRoutes from "./src/routes/emailRoutes.js"
 import aboutSectionRoutes from "./src/routes/aboutSectionRoutes.js";
 import  "./src/config/config.js";
 import { PORT } from "./src/config/config.js";
@@ -27,6 +28,7 @@ app.use("/api/v1", artRoutes);
 app.use("/api/v1", socialRoutes);
 app.use("/api/v1", formRoutes);
 app.use("/api/v1", aboutSectionRoutes);
+app.use("/api/v1", emailRoutes)
 
 app.use("/api/v1/auth", authRoutes);
 
