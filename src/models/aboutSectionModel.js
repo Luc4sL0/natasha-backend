@@ -25,7 +25,7 @@ export class AboutSectionModel{
         return new AboutSectionModel({
             id: obj.id || obj._id || null,
             imgUrl: obj.imgUrl || null,
-            text: obj.text || "Texto vazio, personalize-o.",
+            text: obj.text || null,
             updatedAt: getDateFromFirestore(obj.updatedAt)
         });
     }
@@ -43,7 +43,7 @@ export class AboutSectionModel{
     // Prepara o objeto para a resposta da API.
     toAnswer(){
         let answer = this.toJSON();
-        answer.imgUrl = API_DOMAIN + answer.imgUrl;
+        if(answer.imgUrl) answer.imgUrl = API_DOMAIN + answer.imgUrl;
         return answer;
     }
 
