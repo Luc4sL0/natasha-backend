@@ -13,7 +13,7 @@ export const getSocialsController = async (req, res) =>{
 
 export const putSocialsController = async (req, res) =>{
     try{
-        let socials = SocialModel.findDocument();
+        let socials = await SocialModel.findDocument();
         if(!socials) throw new Error("Não existe um documento com 'id' 'social' no banco de dados");
 
         const updates = { ...req.body };
