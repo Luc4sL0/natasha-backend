@@ -13,7 +13,7 @@ export const getFormController = async (req, res) =>{
 
 export const putFormController = async (req, res) =>{
     try{
-        let form = FormModel.findDocument();
+        let form = await FormModel.findDocument();
         if(!form) throw new Error("Não existe um documento com 'id' 'form' no banco de dados");
 
         const updates = { ...req.body };
