@@ -1,7 +1,8 @@
 # 🎨 Portfólio Artístico - Back-end
 
-API em **Node.js + Express + Firebase Firestore** responsável por gerenciar dados dinâmicos de um portfólio artístico — incluindo **artes, eventos** e conteúdo configurável via painel administrativo.
+API em **Node.js + Express + Firebase Firestore + Firebase Authentication** responsável por gerenciar dados dinâmicos de um portfólio artístico — incluindo **artes, eventos** e conteúdo configurável via painel administrativo.
 
+ATENÇÃO -> PARA EXECUTAR LOCALMENTE E TESTAR A API, O ARQUIVO src/config/firebase-service-account.json PRECISA SER SUBSTITUÍDO PELA ARQUIVO COM AS CREDENCIAIS ATUALMENTE ATIVAS (ARQUIVO PRESENTE NA ENTREGA DO TRABALHO). 
 ---
 
 ## 🚀 Tecnologias Utilizadas
@@ -57,7 +58,7 @@ npm install
 Use `node server.js` para executar diretamente.
 
 A API estará disponível em:
-👉 `http://localhost:5000/api`
+👉 `http://localhost:3000/api`
 
 ---
 
